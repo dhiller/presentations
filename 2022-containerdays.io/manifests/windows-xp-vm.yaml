@@ -1,0 +1,74 @@
+apiVersion: kubevirt.io/v1alpha3
+kind: VirtualMachine
+metadata:
+  name: windows-xp
+spec:
+  # we want the VM to startup right away
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: windows-xp
+    spec:
+      domain:
+        clock:
+          timer:
+            hpet:
+              present: false
+            hyperv: {}
+            pit:
+              tickPolicy: delay
+            rtc:
+              tickPolicy: catchup
+          utc: {}
+        cpu:
+          cores: 1
+        devices:
+          disks:
+          - bootOrder: 1
+            disk:
+              bus: sata
+            name: harddrive
+          - bootOrder: 2
+            disk:
+              bus: sata
+            name: virtiocontainerdisk
+          inputs:
+          # it is suggested to add a usb input device for windows
+          - bus: usb
+            name: tablet1
+            type: tablet
+          # e1000 network card will work for windows
+          interfaces:
+          - masquerade: {}
+            model: e1000
+            name: default
+          # doesn't work (yet)
+#          sound:
+#            name: default
+        features:
+          acpi: {}
+          apic: {}
+          hyperv:
+            relaxed: {}
+            spinlocks:
+              spinlocks: 8191
+            vapic: {}
+        machine:
+          # force emulation of the pc chipset
+          # need to change config as here https://github.com/kubevirt/kubevirt/issues/2762#issuecomment-545300454
+          # see https://github.com/kubevirt/kubevirt/issues/2762#issuecomment-542028517
+          type: pc
+        resources:
+          requests:
+            memory: 128Mi
+      networks:
+      - name: default
+        pod: {}
+      volumes:
+      - name: harddrive
+        persistentVolumeClaim:
+          claimName: windows-vm-disk
+      - containerDisk:
+          image: quay.io/kubevirt/virtio-container-disk
+        name: virtiocontainerdisk
