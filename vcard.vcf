@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:4.0
+N:Hiller;Daniel;;Mr.;
+FN:Daniel Hiller
+ORG:Red Hat
+TITLE:Senior Software Engineer
+PHOTO;MEDIATYPE#image/jpg:https://www.dhiller.de/img/dhiller_containerdays_2022.jpg
+EMAIL;TYPE=work:dhiller@redhat.com
+REV:20240617T203000Z
+URL:https://www.dhiller.de
+IMPP:mastodon:@dhiller@fosstodon.org
+IMPP:slack:kubernetes.slack.com/@dhiller
+END:VCARD
